@@ -4,12 +4,16 @@
  * Имеет свойство URL, равное '/user'.
  * */
 class User {
+
+  static URL = '/user';
+  
+
   /**
    * Устанавливает текущего пользователя в
    * локальном хранилище.
    * */
   static setCurrent(user) {
-
+    localStorage.user = JSON.stringify(user);
   }
 
   /**
@@ -17,7 +21,7 @@ class User {
    * пользователе из локального хранилища.
    * */
   static unsetCurrent() {
-
+    localStorage.removeItem("user");
   }
 
   /**
@@ -25,16 +29,27 @@ class User {
    * из локального хранилища
    * */
   static current() {
-
-  }
+    if(localStorage.getItem("user")) {
+      return JSON.parse(localStorage.getItem("user")).user;
+  } 
+}
 
   /**
    * Получает информацию о текущем
    * авторизованном пользователе.
    * */
-  static fetch( data, callback = f => f ) {
-
-  }
+  static fetch(data, callback = (err, response) => {}
+    ) {
+      if(data) {
+        const options = {
+          data: data,
+          url: `${this.url}/current`,
+          method: "GET",
+          callback: callback
+        }
+        createRequest(options);
+      } 
+ }
 
   /**
    * Производит попытку авторизации.
@@ -42,9 +57,16 @@ class User {
    * сохранить пользователя через метод
    * User.setCurrent.
    * */
-  static login( data, callback = f => f ) {
-
-  }
+  static login( data, callback = (err, response) => {}
+    ) {
+      const options = {
+        data: data,
+        url: `${this.url}/login`,
+        method: "POST",
+        callback: callback
+      }
+      createRequest(options);
+    }
 
   /**
    * Производит попытку регистрации пользователя.
@@ -52,15 +74,29 @@ class User {
    * сохранить пользователя через метод
    * User.setCurrent.
    * */
-  static register( data, callback = f => f ) {
-
+  static register( data, callback = (err, response) => {}
+  ) {
+    const options = {
+      data: data,
+      url: `${this.url}/register`,
+      method: "POST",
+      callback: callback
+    }
+    createRequest(options);
   }
 
   /**
    * Производит выход из приложения. После успешного
    * выхода необходимо вызвать метод User.unsetCurrent
    * */
-  static logout( data, callback = f => f ) {
-
+  static logout(data, callback = (err, response) => {}
+  ) {
+    const options = {
+    data: data,
+    url: `${this.url}/logout`,
+    method: "POST",
+    callback: callback
+    }
+  createRequest(options);  
   }
 }
